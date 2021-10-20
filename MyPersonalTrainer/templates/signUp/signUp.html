@@ -1,0 +1,32 @@
+{% extends 'base.html'%}
+{% load static %}
+
+
+{% block styles%}
+<link rel="stylesheet" href="{% static 'css/style2.css' %}">
+{% endblock styles %}
+{% block content%}
+
+
+<section class="SignInPage">
+  <div class="box">
+      <form>
+         <div class="con">
+         <div class="head-form">
+            <h2>Sign In</h2>
+            <p>login here using your username and password</p>
+         </div>
+         <br>
+         <div class="field-set">
+               <input class="form-input" id="txt-input" name="signInUser" type="text" placeholder="Username" method="post" required>
+           
+            <br>
+            <input class="form-input" type="password" name="signInPwd" placeholder="Password" id="pwd"  name="password" method="post" required>
+            <br>
+            <button class="log-in"> Sign Up </button>
+         </div>
+        </div>
+      </form>
+  </div>
+</section>  
+{% endblock content%}
