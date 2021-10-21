@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'myapi',
     'rest_framework',
     'rest_framework.authtoken',
-
+    'widget_tweaks'
 ]
 
 REST_FRAMEWORK = {
