@@ -21,6 +21,7 @@ urlpatterns = [
     path('',include('home.urls')),
     path('',include('signIn.urls')),
     path('',include('signUp.urls')),
+    path('',include('myapi.urls'))
     
 
 ]
