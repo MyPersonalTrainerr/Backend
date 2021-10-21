@@ -15,13 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from rest_framework.authtoken.views import obtain_auth_token  # <-- Here
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('home.urls')),
     path('',include('signIn.urls')),
     path('',include('signUp.urls')),
-    path('',include('myapi.urls'))
+    path('',include('myapi.urls')),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),  # <-- And here
+
     
 
 ]
