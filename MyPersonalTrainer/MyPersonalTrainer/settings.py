@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'home',
     'signIn',
     'signUp',
-     'crispy_forms',
+    'crispy_forms',
+    'myapi',
+    'rest_framework',
+
 ]
 
 MIDDLEWARE = [
