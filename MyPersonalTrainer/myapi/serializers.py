@@ -1,14 +1,18 @@
-from rest_framework import generics
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated,AllowAny  # <-- Here
-from .serializers import PostSerializer
+from rest_framework import serializers
+from django.contrib.auth.models import User
 
 
-class signUpApi(generics.GenericAPIView):
-    permission_classes= ( AllowAny,)
-    serializer_class=PostSerializer
-    def post(self,request,*args,**kwargs):
-        serializer=PostSerializer(data=request.data)
-        serializer.is_valid()
-        serializer.save()
-        return Response(serializer.data)
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=User
+        fields=(
+            'email','username','password',
+        )
+    def create(self, validated_data):
+        user = User(
+            email=validated_data['email'],
+            username=validated_data['username']
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
