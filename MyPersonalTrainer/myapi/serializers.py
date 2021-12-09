@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-
+from .models import file
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,3 +17,13 @@ class PostSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+class filePostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=file
+        fields=('path',)
+    def create(self,validated_data):
+        File=file(
+            path=validated_data['path']
+        )
+        File.save()
+        return File

@@ -5,4 +5,5 @@ urlpatterns = [
     path('hello/', views.HelloView.as_view(), name='hello'),
     path('signUpApi/',views.signUpApi.as_view(), name='signUpApi'),
     path('rest-auth/',include('rest_auth.urls')),
+     path('fileUploadApi/', views.fileUploadApi.as_view(), name='postFile'),
 ]
