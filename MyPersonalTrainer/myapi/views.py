@@ -3,6 +3,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,AllowAny  # <-- Here
 from .serializers import PostSerializer, filePostSerializer
+from django.core.files.storage import FileSystemStorage
 
 class HelloView(APIView):
     permission_classes = (IsAuthenticated,)             # <-- And here
@@ -19,11 +20,15 @@ class signUpApi(generics.GenericAPIView):
         serializer.is_valid()
         serializer.save()
         return Response(serializer.data)
-class fileUploadApi(generics.GenericAPIView):
+class fileUploadApi(APIView):
     permission_classes= ( AllowAny,)
     serializer_class=filePostSerializer
-    def post(self,request,*args,**kwargs):
-        serializer2=filePostSerializer(data=request.data)
-        serializer2.is_valid()
-        serializer2.save()
-        return Response(serializer2.data)
+    def get(self, request):
+        return Response("GET API")
+    def post(self, request):
+        file_uploaded = request.FILES.get('file_uploaded')
+        fs = FileSystemStorage()
+        fs.save(file_uploaded.name,file_uploaded)
+        content_type = file_uploaded.content_type
+        response = "POST API and you have uploaded a {} file".format(content_type)
+        return Response(response)
