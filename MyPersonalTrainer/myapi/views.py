@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,AllowAny  # <-- Here
 from .serializers import PostSerializer, filePostSerializer
 from django.core.files.storage import FileSystemStorage
+from .models import file
+from MyPersonalTrainer.settings import MEDIA_ROOT
 
 class HelloView(APIView):
     permission_classes = (IsAuthenticated,)             # <-- And here
@@ -30,5 +32,8 @@ class fileUploadApi(APIView):
         fs = FileSystemStorage()
         fs.save(file_uploaded.name,file_uploaded)
         content_type = file_uploaded.content_type
+        fileName=file_uploaded.name
+        filePath=MEDIA_ROOT+'\\'+fileName
+        file.objects.create(path=filePath)
         response = "POST API and you have uploaded a {} file".format(content_type)
         return Response(response)
