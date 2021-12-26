@@ -38,4 +38,10 @@ class fileUploadApi(APIView):
         file.objects.create(path=filePath)
         response = "POST API and you have uploaded a {} file".format(content_type)
         return Response(response)
-
+class Get_Path(APIView):
+    permission_classes= ( AllowAny,)
+    def get(self,request):
+        #path=file.objects.get(id=2)
+        path=file.objects.filter().order_by('-id')[0]
+        context={'Path': path.path}
+        return Response (context)
