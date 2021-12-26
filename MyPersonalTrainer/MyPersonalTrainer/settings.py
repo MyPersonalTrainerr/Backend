@@ -37,16 +37,24 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'home',
     'signIn',
     'signUp',
-    'crispy_forms',
     'myapi',
+
+    'crispy_forms',
+    'widget_tweaks',
+
     'rest_framework',
     'rest_framework.authtoken',
-    'widget_tweaks',
+    'rest_auth.registration',
     'rest_auth',
+    'allauth',
+    'allauth.account',
 ]
+SITE_ID = 1
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (

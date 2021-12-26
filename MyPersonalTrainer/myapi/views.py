@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.response import Response
@@ -33,7 +34,8 @@ class fileUploadApi(APIView):
         fs.save(file_uploaded.name,file_uploaded)
         content_type = file_uploaded.content_type
         fileName=file_uploaded.name
-        filePath=MEDIA_ROOT+'\\'+fileName
+        filePath=MEDIA_ROOT+'/'+fileName
         file.objects.create(path=filePath)
         response = "POST API and you have uploaded a {} file".format(content_type)
         return Response(response)
+
