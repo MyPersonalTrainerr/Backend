@@ -7,6 +7,9 @@ from .serializers import PostSerializer, filePostSerializer
 from django.core.files.storage import FileSystemStorage
 from .models import file
 from MyPersonalTrainer.settings import MEDIA_ROOT
+from subprocess import Popen
+
+
 
 class HelloView(APIView):
     permission_classes = (IsAuthenticated,)             # <-- And here
@@ -37,11 +40,13 @@ class fileUploadApi(APIView):
         filePath=MEDIA_ROOT+'/'+fileName
         file.objects.create(path=filePath)
         response = "POST API and you have uploaded a {} file".format(content_type)
+        Popen(['python3', 'pose2.py', '-v',filePath])
         return Response(response)
 class Get_Path(APIView):
     permission_classes= ( AllowAny,)
     def get(self,request):
         #path=file.objects.get(id=2)
         path=file.objects.filter().order_by('-id')[0]
-        context={'Path': path.path}
-        return Response (context)
+        Path=path.path
+        #context={'Path': path.path}
+        return Response (Path)
