@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'signIn',
     'signUp',
     'myapi',
+    'NewUser',
 
     'crispy_forms',
     'widget_tweaks',
@@ -55,6 +56,8 @@ INSTALLED_APPS = [
     'allauth.account',
 ]
 
+AUTH_USER_MODEL = 'NewUser.Account'
+
 SITE_ID = 1
 
 REST_FRAMEWORK = {
@@ -64,6 +67,10 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     )
+}
+REST_AUTH_SERIALIZERS = {
+   'LOGIN_SERIALIZER': 'NewUser.serializers.LoginUserSerializer',
+   'USER_DETAILS_SERIALIZER': 'NewUser.serializers.UserSerializer',
 }
 
 MIDDLEWARE = [
@@ -155,3 +162,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGOUT_URL='index'
 LOGIN_URL='index'
+
+
+#ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/?verification=1'
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/?verification=1'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
