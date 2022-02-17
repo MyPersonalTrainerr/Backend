@@ -8,7 +8,9 @@ from django.core.files.storage import FileSystemStorage
 from .models import file
 from MyPersonalTrainer.settings import MEDIA_ROOT
 from subprocess import call,Popen
-
+import time
+import os
+import json
 
 class HelloView(APIView):
     permission_classes = (IsAuthenticated,)             # <-- And here
@@ -39,7 +41,13 @@ class fileUploadApi(APIView):
         filePath=MEDIA_ROOT+'/'+fileName
         file.objects.create(path=filePath)
         response = "POST API and you have uploaded a {} file".format(content_type)
-        #Popen(['python3', 'pose2.py', '-v',filePath])
+        ### Delete the OldJson file 
+        JsonFilePath = 'Points.json'
+        if os.path.exists(JsonFilePath):
+            os.remove(JsonFilePath)
+        else:
+            print("Can not delete the file as it doesn't exists")
+        Popen(['python3', 'pose2.py', '-v',filePath])
         return Response(response)
 class Get_Path(APIView):
     permission_classes= ( AllowAny,)
