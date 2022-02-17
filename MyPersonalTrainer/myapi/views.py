@@ -48,7 +48,22 @@ class fileUploadApi(APIView):
         else:
             print("Can not delete the file as it doesn't exists")
         Popen(['python3', 'pose2.py', '-v',filePath])
+        time.sleep(21)
+        ### Validate the receiving JsonFile 
+        if os.path.exists("Points.json"):
+            with open ('Points.json') as f:
+                print("the given JsonFile is:",ValidateJsonFile(f))
         return Response(response)
+
+def ValidateJsonFile(jsonFile):
+    try:
+        json.load(jsonFile)
+    except ValueError as error:
+        print(error)
+        return False
+    return True
+
+'''
 class Get_Path(APIView):
     permission_classes= ( AllowAny,)
     def get(self,request):
@@ -56,3 +71,4 @@ class Get_Path(APIView):
         path=file.objects.filter().order_by('-id')[0]
         Path=path.path
         return Response (Path)
+'''
