@@ -4,7 +4,6 @@ from . import views
 #from rest_auth.registration.urls'
 urlpatterns = [
     path('hello/', views.HelloView.as_view(), name='hello'),
-    path('signUpApi/',views.signUpApi.as_view(), name='signUpApi'),
     path('fileUploadApi/', views.fileUploadApi.as_view(), name='postFile'),
-    path('getPath/',views.Get_Path.as_view(),name='path'),
+    #path('getPath/',views.Get_Path.as_view(),name='path'),
 ]

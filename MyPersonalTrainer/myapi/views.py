@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,AllowAny  # <-- Here
-from .serializers import PostSerializer, filePostSerializer
+from .serializers import filePostSerializer
 from django.core.files.storage import FileSystemStorage
 from .models import file
 from MyPersonalTrainer.settings import MEDIA_ROOT
@@ -19,14 +19,7 @@ class HelloView(APIView):
         content = {'message': 'Hello, World!'}
         return Response(content)
 
-class signUpApi(generics.GenericAPIView):
-    permission_classes= ( AllowAny,)
-    serializer_class=PostSerializer
-    def post(self,request,*args,**kwargs):
-        serializer=PostSerializer(data=request.data)
-        serializer.is_valid()
-        serializer.save()
-        return Response(serializer.data)
+
 class fileUploadApi(APIView):
     permission_classes= ( AllowAny,)
     serializer_class=filePostSerializer
@@ -48,11 +41,20 @@ class fileUploadApi(APIView):
         else:
             print("Can not delete the file as it doesn't exists")
         Popen(['python3', 'pose2.py', '-v',filePath])
-        time.sleep(21)
+        time.sleep(25)
         ### Validate the receiving JsonFile 
-        if os.path.exists("Points.json"):
-            with open ('Points.json') as f:
-                print("the given JsonFile is:",ValidateJsonFile(f))
+        if os.path.exists(JsonFilePath):
+            with open (JsonFilePath) as f:
+                #print("the given JsonFile is:",ValidateJsonFile(f))
+                if ValidateJsonFile(f):
+                    print("The given json file is valid")
+                else :
+                    time.sleep(15)
+                    os.remove(JsonFilePath)
+                    Popen(['python3', 'pose2.py', '-v',filePath])
+                    time.sleep(45)
+                    with open (JsonFilePath) as f:
+                        print("the given JsonFile is:",ValidateJsonFile(f))                    
         return Response(response)
 
 def ValidateJsonFile(jsonFile):
