@@ -1,14 +1,19 @@
 from django.shortcuts import render
-from rest_framework.views import APIView
+from django.core.files.storage import FileSystemStorage
+
 from rest_framework import generics
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated,AllowAny  # <-- Here
-from .serializers import PostSerializer, filePostSerializer
-from django.core.files.storage import FileSystemStorage
+
+from .serializers import filePostSerializer
 from .models import file
 from MyPersonalTrainer.settings import MEDIA_ROOT
-from subprocess import Popen
 
+import subprocess 
+import time
+import os
+import json
 
 
 class HelloView(APIView):
@@ -18,14 +23,7 @@ class HelloView(APIView):
         content = {'message': 'Hello, World!'}
         return Response(content)
 
-class signUpApi(generics.GenericAPIView):
-    permission_classes= ( AllowAny,)
-    serializer_class=PostSerializer
-    def post(self,request,*args,**kwargs):
-        serializer=PostSerializer(data=request.data)
-        serializer.is_valid()
-        serializer.save()
-        return Response(serializer.data)
+
 class fileUploadApi(APIView):
     permission_classes= ( AllowAny,)
     serializer_class=filePostSerializer
@@ -40,13 +38,45 @@ class fileUploadApi(APIView):
         filePath=MEDIA_ROOT+'/'+fileName
         file.objects.create(path=filePath)
         response = "POST API and you have uploaded a {} file".format(content_type)
-        Popen(['python3', 'pose2.py', '-v',filePath])
+        
+        ### Delete the OldJson file 
+        JsonFilePath = 'Points.json'
+        if os.path.exists(JsonFilePath):
+            os.remove(JsonFilePath)
+        else:
+            print("Can not delete the file as it doesn't exists")
+
+        ### Calling The Deep-Learning Model    
+        Calling_DL =subprocess.Popen(['python3', 'pose2.py', '-v',filePath])
+        Calling_DL.wait()
+
+        ### Validate the receiving JsonFile 
+        if os.path.exists(JsonFilePath):
+            with open (JsonFilePath) as f:
+                if ValidateJsonFile(f):
+                    print("The given json file is valid")
+                else :
+                    os.remove(JsonFilePath)
+                    Calling_DL =subprocess.Popen(['python3', 'pose2.py', '-v',filePath])
+                    Calling_DL.wait()
+                    with open (JsonFilePath) as f:
+                        print("the given JsonFile is:",ValidateJsonFile(f))                    
         return Response(response)
+
+def ValidateJsonFile(jsonFile):
+    try:
+        json.load(jsonFile)
+    except ValueError as error:
+        print(error)
+        return False
+    return True
+
+'''
 class Get_Path(APIView):
     permission_classes= ( AllowAny,)
     def get(self,request):
         #path=file.objects.get(id=2)
         path=file.objects.filter().order_by('-id')[0]
         Path=path.path
-        #context={'Path': path.path}
         return Response (Path)
+'''

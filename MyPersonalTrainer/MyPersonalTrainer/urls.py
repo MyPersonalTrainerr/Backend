@@ -24,8 +24,7 @@ urlpatterns = [
     path('',include('signIn.urls')),
     path('',include('signUp.urls')),
     path('',include('myapi.urls')),
+    path('',include('NewUser.urls')),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),  # <-- And here
-
-    
 
 ]
