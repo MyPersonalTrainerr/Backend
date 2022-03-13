@@ -1,9 +1,7 @@
-from django.urls import path,include
+from django.urls import path, include
 from . import views
-#from rest_auth.urls
-#from rest_auth.registration.urls'
+
+
 urlpatterns = [
-    path('hello/', views.HelloView.as_view(), name='hello'),
-    path('fileUploadApi/', views.fileUploadApi.as_view(), name='postFile'),
-    #path('getPath/',views.Get_Path.as_view(),name='path'),
+    path('UploadVideo/', views.UploadVideo.as_view(), name='UploadVideo'),
 ]
