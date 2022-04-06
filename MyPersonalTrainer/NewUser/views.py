@@ -1,8 +1,9 @@
 from rest_framework import permissions
-from rest_framework.permissions import AllowAny  # <-- Here
+from rest_framework.permissions import AllowAny
 from .serializers import LoginUserSerializer
 from django.contrib.auth import login
 from rest_auth.views import LoginView as RestLoginView
+
 
 class Login(RestLoginView):
     permission_classes = (permissions.AllowAny,)
