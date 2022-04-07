@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
     'crispy_forms',
     'widget_tweaks',
+    'coverage',
 
    'rest_framework',
     'rest_framework.authtoken',
