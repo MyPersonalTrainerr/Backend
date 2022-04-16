@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'signUp',
     'myapi',
     'NewUser',
+    'blogs',
 
     'crispy_forms',
     'widget_tweaks',
