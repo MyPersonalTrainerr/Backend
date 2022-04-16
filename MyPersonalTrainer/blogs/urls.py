@@ -1,3 +1,8 @@
-from django.urls import path,include
+from django.urls import path
 
-urlpatterns = []
+from blogs.views import blogs_view
+
+
+urlpatterns=[
+    path('', blogs_view, name='blogs_view')
+]
