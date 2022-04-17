@@ -3,8 +3,57 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'css/style2.css' %}">
+    <link rel="stylesheet" href="{% static 'css/blogs.css' %}">
 {% endblock styles %}
-
 {% block content %}
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
+          rel="stylesheet">
+
+    {% if posts %}
+        {% for post in posts %}
+            <div class="container mb80">
+                <div class="page-timeline">
+                    <div class="vtimeline-point">
+                        <div class="vtimeline-icon">
+                            <i class="fa fa-image"></i>
+                        </div>
+
+                        <div class="vtimeline-block">
+                            <span class="vtimeline-date">{{ post.created_at }}</span>
+                            <div class="vtimeline-content">
+                                <a href="/blogs/{{ post.slug }}">
+                                    <h3>{{ post.title }}</h3>
+                                </a>
+                                <ul class="post-meta list-inline">
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-user-circle-o"></i>
+                                        <a href="#">{{ post.author }}</a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <i class="fa fa-calendar-o"></i>
+                                        <a href="#">{{ post.updated_at }}</a>
+                                    </li>
+                                    {% if post.tags %}
+                                        <li class="list-inline-item">
+                                            <i class="fa fa-tags"></i>
+                                            <a href="#">{{ post.tags }}</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                                <p>
+                                    {{ post.content }}
+                                </p>
+                                <br>
+                                <a href="/blogs/{{ post.slug }}" class="btn btn-outline-secondary btn-sm">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="text-center">
+            No blogs found
+        </div>
+    {% endif %}
 {% endblock content %}
