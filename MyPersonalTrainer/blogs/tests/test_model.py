@@ -46,3 +46,7 @@ class TestPost(TestCase):
         post_status = post._meta.get_field('status')
         self.assertEqual(post_status.choices, STATUS)
         self.assertEqual(post_status.default, 0)
+
+    def test_title(self):
+        post = Post.objects.get(id=1)
+        self.assertEqual(str(post), post.title)
