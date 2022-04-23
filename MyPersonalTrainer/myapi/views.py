@@ -13,6 +13,7 @@ import json
 import os
 import time
 import subprocess
+import threading
 from natsort import natsorted
 
 class HelloView(APIView):
@@ -22,6 +23,42 @@ class HelloView(APIView):
         content = {'message': 'Hello, World!'}
         return Response(content)
 
+class HandleVideos(threading.Thread):
+    def __init__(self,filePath):
+        threading.Thread.__init__(self)
+        self.filePath=filePath
+    def run(self):
+        # Get All JsonFiles and sort them in a list
+        JsonFiles_List = Existed_JsonFiles()
+
+        # Check if there are Old JsonFiles and delete them
+        if JsonFiles_List:
+            for Jsonfile in JsonFiles_List:
+                os.remove(Jsonfile)
+            print("Old Jsonfiles deleted successfuly")
+        else:
+            print("there are no jsonfiles")
+
+        # Calling Deep-Learning Model
+        Calling_DL = subprocess.Popen(['python3', 'pose2.py', '-v', self.filePath])
+        Calling_DL.wait()
+
+        # Sorting the created JsonFiles from the Deep-Learning
+        JsonFiles_List = Existed_JsonFiles()
+
+        # Validate The Created JsonFiles
+        if JsonFiles_List:
+            valid_JsonFiles = []
+            Invalid_JsonFiles = []
+            for Jsonfile in JsonFiles_List:
+                with open(Jsonfile) as f:
+                    if ValidateJsonFile(f):
+                        valid_JsonFiles.append(Jsonfile)
+                    else:
+                        Invalid_JsonFiles.append(Jsonfile)
+            print("The Valid JsonFiles are:", valid_JsonFiles)
+            print("The invalid JsonFiles are:", Invalid_JsonFiles)
+ 
 
 class fileUploadApi(APIView):
     permission_classes = (AllowAny,)
@@ -40,38 +77,7 @@ class fileUploadApi(APIView):
         file.objects.create(path=filePath)
         response = "POST API and you have uploaded a {} file".format(
             content_type)
-
-        # Get All JsonFiles and sort them in a list
-        JsonFiles_List = Existed_JsonFiles()
-
-        # Check if there are Old JsonFiles and delete them
-        if JsonFiles_List:
-            for Jsonfile in JsonFiles_List:
-                os.remove(Jsonfile)
-            print("Old Jsonfiles deleted successfuly")
-        else:
-            print("there are no jsonfiles")
-
-        # Calling Deep-Learning Model
-        Calling_DL = subprocess.Popen(['python3', 'pose2.py', '-v', filePath])
-        Calling_DL.wait()
-
-        # Sorting the created JsonFiles from the Deep-Learning
-        JsonFiles_List = Existed_JsonFiles()
-
-        # Validate The Created JsonFiles
-        if JsonFiles_List:
-            valid_JsonFiles = []
-            Invalid_JsonFiles = []
-            for Jsonfile in JsonFiles_List:
-                with open(Jsonfile) as f:
-                    if ValidateJsonFile(f):
-                        valid_JsonFiles.append(Jsonfile)
-                    else:
-                        Invalid_JsonFiles.append(Jsonfile)
-            print("The Valid JsonFiles are:", valid_JsonFiles)
-            print("The invalid JsonFiles are:", Invalid_JsonFiles)
-
+        HandleVideos(filePath).start()
         return Response(response)
 
 
