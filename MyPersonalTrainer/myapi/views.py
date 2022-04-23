@@ -58,6 +58,9 @@ class HandleVideos(threading.Thread):
                         Invalid_JsonFiles.append(Jsonfile)
             print("The Valid JsonFiles are:", valid_JsonFiles)
             print("The invalid JsonFiles are:", Invalid_JsonFiles)
+        getProgress=file.objects.filter().order_by('-id')[0]
+        getProgress.progress=1
+        getProgress.save()
  
 
 class fileUploadApi(APIView):
