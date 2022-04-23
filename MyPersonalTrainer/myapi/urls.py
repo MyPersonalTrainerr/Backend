@@ -5,5 +5,5 @@ from . import views
 urlpatterns = [
     path('hello/', views.HelloView.as_view(), name='hello'),
     path('fileUploadApi/', views.fileUploadApi.as_view(), name='postFile'),
-    #path('getPath/',views.Get_Path.as_view(),name='path'),
+    path('getStatus/',views.Get_Status.as_view(),name='GetStatus'),
 ]

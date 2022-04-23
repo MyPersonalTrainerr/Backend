@@ -101,12 +101,9 @@ def Existed_JsonFiles():
     return (Sorted_List)
 
 
-'''
-class Get_Path(APIView):
+class Get_Status(APIView):
     permission_classes= ( AllowAny,)
     def get(self,request):
-        #path=file.objects.get(id=2)
-        path=file.objects.filter().order_by('-id')[0]
-        FilePath=path.path
-        return Response (FilePath)
-'''
+        status=file.objects.filter().order_by('-id')[0]
+        JsonStatus=status.progress
+        return Response (JsonStatus)
