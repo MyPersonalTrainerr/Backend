@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-w&2kbbw#9l%_+tejo5oc8l2j)6@*hw&fj1&4jg#7_+hk+nm=t#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mypersonal-trainer-app.herokuapp.com','127.0.0.1']
 
 
 # Application definition
@@ -173,10 +173,12 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-LOGIN_URL = 'http://localhost:8000/login/'
+LOGIN_URL = 'https://mypersonal-trainer-app.herokuapp.com/login/'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER='mypersonaltrainerapp33@gmail.com'
+EMAIL_HOST_PASSWORD='myapp123456789*'
+#EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+#EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
