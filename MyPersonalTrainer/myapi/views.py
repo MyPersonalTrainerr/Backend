@@ -1,14 +1,16 @@
 from django.core.files.storage import FileSystemStorage
 
 from rest_framework.views import APIView
-from rest_framework import generics
+from rest_framework import generics,status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from .serializers import filePostSerializer
+from .serializers import filePostSerializer,postStatusSerializer
 from .models import file
 from MyPersonalTrainer.settings import MEDIA_ROOT
 
+import sys
+import glob
 import json
 import os
 import time
@@ -40,7 +42,7 @@ class HandleVideos(threading.Thread):
             print("there are no jsonfiles")
 
         # Calling Deep-Learning Model
-        Calling_DL = subprocess.Popen(['python3', 'pose2.py', '-v', self.filePath])
+        Calling_DL=subprocess.Popen(['python', 'E:/GP_Threading/Backend/MyPersonalTrainer/Deep-Learning/Deep-Learning/main.py', '-v',self.filePath])
         Calling_DL.wait()
 
         # Sorting the created JsonFiles from the Deep-Learning
@@ -58,9 +60,6 @@ class HandleVideos(threading.Thread):
                         Invalid_JsonFiles.append(Jsonfile)
             print("The Valid JsonFiles are:", valid_JsonFiles)
             print("The invalid JsonFiles are:", Invalid_JsonFiles)
-        getProgress=file.objects.filter().order_by('-id')[0]
-        getProgress.progress=1
-        getProgress.save()
  
 
 class fileUploadApi(APIView):
@@ -71,6 +70,9 @@ class fileUploadApi(APIView):
         return Response("GET API")
 
     def post(self, request):
+        filelist = glob.glob(os.path.join(MEDIA_ROOT, "*"))
+        for f in filelist:
+            os.remove(f)
         file_uploaded = request.FILES.get('file_uploaded')
         fs = FileSystemStorage()
         fs.save(file_uploaded.name, file_uploaded)
@@ -94,12 +96,23 @@ def ValidateJsonFile(jsonFile):
 
 
 def Existed_JsonFiles():
-    path_to_json = '/home/awatef/MyPersonalTrainer'
+    path_to_json = 'E:/GP_Threading/Backend/MyPersonalTrainer'
     json_files = [pos_json for pos_json in os.listdir(
         path_to_json) if pos_json.endswith('.json')]
     Sorted_List = natsorted(json_files)
     return (Sorted_List)
 
+class PostStatus(APIView):
+        permission_classes= ( AllowAny,)
+        def post(self,request):
+            Modeserializer=postStatusSerializer(data=request.data)
+            if Modeserializer.is_valid():
+                getProgress=file.objects.filter().order_by('-id')[0]
+                getProgress.progress=1
+                getProgress.save()
+                return Response({"status": "success", "data": Modeserializer.data}, status=status.HTTP_200_OK)
+            else:
+                return Response({"status": "error", "data": Modeserializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 class Get_Status(APIView):
     permission_classes= ( AllowAny,)
