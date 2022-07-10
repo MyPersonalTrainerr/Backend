@@ -42,7 +42,7 @@ class HandleVideos(threading.Thread):
             print("there are no jsonfiles")
 
         # Calling Deep-Learning Model
-        Calling_DL=subprocess.Popen(['python', 'E:/GP_Threading/Backend/MyPersonalTrainer/Deep-Learning/Deep-Learning/main.py', '-v',self.filePath])
+        Calling_DL=subprocess.Popen(['python', 'E:/GP_Threading/Backend/MyPersonalTrainer/Deep-Learning/main.py', '-v',self.filePath])
         Calling_DL.wait()
 
         # Sorting the created JsonFiles from the Deep-Learning
