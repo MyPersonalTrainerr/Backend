@@ -5,7 +5,7 @@ from rest_framework import generics,status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from .serializers import filePostSerializer,postStatusSerializer
+from .serializers import filePostSerializer,postStatusSerializer,postExerciseSerializer
 from .models import file
 from MyPersonalTrainer.settings import MEDIA_ROOT
 
@@ -79,7 +79,10 @@ class fileUploadApi(APIView):
         content_type = file_uploaded.content_type
         fileName = file_uploaded.name
         filePath = MEDIA_ROOT+'/'+fileName
-        file.objects.create(path=filePath)
+        # file.objects.create(path=filePath)
+        getFile=file.objects.filter().order_by('-id')[0]
+        getFile.path=filePath
+        getFile.save()
         response = "POST API and you have uploaded a {} file".format(
             content_type)
         HandleVideos(filePath).start()
@@ -120,3 +123,14 @@ class Get_Status(APIView):
         status=file.objects.filter().order_by('-id')[0]
         JsonStatus=status.progress
         return Response (JsonStatus)
+
+class PostExercise(APIView):
+        permission_classes= ( AllowAny,)
+        serializer_class=postExerciseSerializer
+        def post(self,request):
+            exerciseserializer=postExerciseSerializer(data=request.data)
+            if exerciseserializer.is_valid():
+                exerciseserializer.save()
+                return Response({"status": "success", "data": exerciseserializer.data}, status=status.HTTP_200_OK)
+            else:
+                return Response({"status": "error", "data": exerciseserializer.errors}, status=status.HTTP_400_BAD_REQUEST)

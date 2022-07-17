@@ -10,3 +10,7 @@ class postStatusSerializer(Serializer):
     class Meta:
         model=file
         fields=('status',)
+class postExerciseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=file
+        fields = ['exercise']
